@@ -2,9 +2,10 @@
 title = "Rust Problem-Solving Handbook (TH)"
 authors = ["Suradet Pratomsak"]
 language = "th"
+description = "คู่มือแก้ปัญหา Rust Programming ภาษาไทย"
 
 [output.html]
-site-url = "/rust-problem-solving/"
+site-url = "https://pharmacist-sabot.github.io/rust-problem-solving/"
 git-repository-url = "https://github.com/pharmacist-sabot/rust-problem-solving"
 
 [output.html.playground]
