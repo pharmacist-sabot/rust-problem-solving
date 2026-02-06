@@ -1,0 +1,12 @@
+[book]
+title = "Rust Problem-Solving Handbook (TH)"
+authors = ["Suradet Pratomsak"]
+language = "th"
+
+[output.html]
+site-url = "/rust-problem-solving/"
+git-repository-url = "https://github.com/pharmacist-sabot/rust-problem-solving"
+
+[output.html.playground]
+editable = true
+line-numbers = true
