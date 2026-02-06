@@ -1,3 +1,3 @@
 # Rust Problem-Solving Handbook (TH)
 
-- [Chapter 1](./chapter_1.md)
+- [PS 01: การเป็นเจ้าของของ `self` ในฟังก์ชันเมมเบอร์](./ps01-ownership-of-a-self-argument.md)
