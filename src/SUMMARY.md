@@ -1,6 +1,6 @@
 # Rust Problem-Solving Handbook (TH)
 
-# Part I: พื้นฐานการจัดการ Ownership, Borrow Checker และ Lifetime
+# Part I: พื้นฐานการจัดการ Ownership, Borrowing และ Lifetime
 - [OB 001: การเป็นเจ้าของของ `self` ในฟังก์ชันเมมเบอร์](./ob001-ownership-of-a-self-argument.md)
 
 # Part II: ระบบประเภทข้อมูล (Type System)
