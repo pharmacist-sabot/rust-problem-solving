@@ -1,311 +1,167 @@
-## OB 001: การเป็นเจ้าของของ self ในฟังก์ชันเมมเบอร์
+## OB 001: การเป็นเจ้าของของ self ในฟังก์ชันเมมเบอร์ (Self Ownership)
 
-ในหัวข้อนี้ เราจะมาหาคำตอบของคำถามพื้นฐานเกี่ยวกับการประกาศเมธอด (method) ที่รับ `self` ว่า
+ในหัวข้อนี้ เราจะมาเจาะลึกคำถามพื้นฐานที่สำคัญมากสำหรับการออกแบบ API ใน Rust นั่นคือ
 
-> "ถ้าเมธอดรับ `self` แปลว่าฟังก์ชันจะ **ยึดครอง (take ownership)** ค่าที่เราส่งเข้าไปจริงๆ หรือเปล่า?"
+> **"ถ้าเมธอดรับ `self` แปลว่าฟังก์ชันจะ 'ยึดครอง' (Take Ownership) ค่าที่เราส่งเข้าไปจนเราใช้ต่อไม่ได้... จริงหรือ?"**
 
-คำถามนี้สำคัญมากสำหรับการออกแบบ API และการจัดการทรัพยากรใน **Rust** เพราะถ้าฟังก์ชันยึดครองค่า แสดงว่าค่านั้นจะถูกย้าย (moved) เข้าไปในฟังก์ชัน และเราก็จะไม่สามารถเอามาใช้ต่อได้อีก
+คำตอบของเรื่องนี้ไม่ได้มีแค่ "ใช่" หรือ "ไม่ใช่" แต่ขึ้นอยู่กับคุณสมบัติของ Type นั้นๆ และเหตุผลเบื้องหลังเรื่องประสิทธิภาพ (Performance) ที่ Rust ออกแบบมาอย่างตั้งใจ
 
-## ตัวอย่างที่ทำให้เกิดข้อสงสัย
+## จุดเริ่มต้นของความสงสัย
 
-ลองดูโค้ดฟังก์ชันจากมาตรฐานไลบรารี (Crate std) กันก่อน
+ลองดูตัวอย่างคลาสสิกจาก Standard Library ของ Rust คือฟังก์ชัน `cos` สำหรับคำนวณค่า cosine
 
 ```rust
+// Signature ใน std library
 pub fn cos(self) -> f32
 ```
 
-เมื่อเราเรียกใช้เมธอดนี้
+สังเกตว่ามันรับ `self` (ไม่ใช่ `&self`) ซึ่งตามกฎ Ownership แล้ว การรับแบบนี้ควรจะเป็นการ **Move** หรือย้ายสิทธิ์ความเป็นเจ้าของเข้าไปในฟังก์ชัน
+
+แต่เมื่อเราเขียนโค้ดจริง
 
 ```rust
 fn main() {
-    let angle  = 0.0f32;
-    let cosine = angle.cos();
-    println!( "angle = {angle}, cosine = {cosine}");
+    let angle = 0.0f32;
+    let cosine = angle.cos(); // เรียกเมธอดที่รับ self
+    
+    // เอ๊ะ! ทำไมยังเอา angle มาปริ้นต์ต่อได้? ไม่โดน Move ไปแล้วเหรอ?
+    println!("angle = {angle}, cosine = {cosine}");
 }
 ```
 
-โค้ดนี้คอมไพล์ผ่านและทำงานได้ปกติ แม้ว่าฟังก์ชันจะรับ `self` ก็ตาม
+โค้ดนี้กลับคอมไพล์ผ่านและทำงานได้ปกติ นี่จึงเป็นที่มาของความสับสนว่าตกลง `self` ทำงานอย่างไรกันแน่
 
-ประเด็นที่น่าสงสัยคือ
+## กฎพื้นฐาน 3 ร่างของ `self`
 
-> "ถ้า `cos(self)` รับ `self` โดยตรง ซึ่งควรจะย้าย ownership แล้วทำไม `angle` ถึงยังใช้งานใน println! ได้อยู่ โดยไม่เกิด error เลย?"
+ก่อนอื่นต้องแม่นยำเรื่อง Syntax ของ `self` ใน Rust เมธอดรับ `self` ได้ 3 แบบหลักๆ
 
-คำตอบของคำถามนี้และแนวคิดที่เกี่ยวข้องคือหัวใจสำคัญของบทความนี้
+| Syntax | ความหมาย | ผลลัพธ์ต่อตัวแปรเดิม | สถานการณ์ที่ใช้ |
+| :--- | :--- | :--- | :--- |
+| **`self`** | **Take Ownership** (ยึดครอง) | ตัวแปรเดิมจะถูก **Move** หรือ **Copy** | ต้องการ "กิน" ค่าเข้าไป (Consuming) หรือคำนวณแล้วคืนค่าใหม่ |
+| **`&self`** | **Shared Borrow** (ยืมอ่าน) | ตัวแปรเดิมยังอยู่ ใช้ต่อได้ | ต้องการแค่อ่านค่าเพื่อคำนวณ |
+| **`&mut self`** | **Mutable Borrow** (ยืมไปแก้) | ตัวแปรเดิมยังอยู่ แต่ถูกล็อกห้ามใครใชัชั่วคราว | ต้องการแก้ไขค่าภายใน (Update state) |
 
-## ทำความเข้าใจความหมายของ `self`
+## ทำไม `angle.cos()` ถึงไม่กิน `angle` หายไป?
 
-ใน Rust ทุกฟังก์ชันหรือเมธอดจะมี signature ที่บอกชัดเจนว่าพารามิเตอร์แต่ละตัว _ยึดครอง_, _ยืมแบบอ่านอย่างเดียว_, หรือ _ยืมแบบแก้ไขได้_ จากค่าที่ส่งเข้าไป
+คำตอบอยู่ที่ **Trait `Copy`** ครับ
 
-### ความแตกต่างระหว่าง `self`, `&self`, และ `&mut self`
+ใน Rust ชนิดข้อมูลพื้นฐาน (Primitives) ที่มีขนาดเล็ก เช่น `f32`, `i32`, `bool`, `char` จะถูก implement trait ที่ชื่อว่า `Copy` โดยอัตโนมัติ
 
-Rust มีสามรูปแบบในการรับค่า `self` ในเมธอด:
+### ความลับของ `Copy` Trait (Semantics vs Mechanics)
+นี่คือจุดที่น่าสนใจจากมุมมองเชิงลึก
 
-| Syntax | วิธีรับค่า | ใช้ตัวแปรเดิมต่อได้ไหม | เหมาะสำหรับ |
-|--------|-----------|------------------------|-------------|
-| `self` | ย้าย ownership (Move/Copy) | ถ้าเป็น Copy: ได้ / ถ้าเป็น Move: ไม่ได้ | เมธอดที่กินค่าทิ้ง (consuming) |
-| `&self` | ยืมแบบอ่านอย่างเดียว | ได้ | เมธอดที่แค่อ่านค่า |
-| `&mut self` | ยืมแบบแก้ไขได้ | ได้ (ตามเงื่อนไขของ Rust) | เมธอดที่แก้ไขค่า |
+1.  **ในทางความหมาย (Semantics)** การประกาศ `fn(self)` คือการประกาศเจตนาว่า **"ฉันต้องการครอบครองค่านี้" (Move semantics)** เสมอ
+2.  **ในทางกลไก (Mechanics)** แต่ถ้า Type นั้นมี `Copy` trait แปะอยู่ คอมไพเลอร์จะเปลี่ยนพฤติกรรมจากการ "ย้ายความเป็นเจ้าของ" (ทำให้ตัวเดิมใช้ไม่ได้) เป็นการ **"ทำสำเนาบิต" (Bitwise Copy)** เข้าไปแทน
 
-### 1. เมื่อเมธอดรับ `self`
+ดังนั้น `angle.cos()` จึงแค่ "สำเนา" ค่าของ `angle` เข้าไปคำนวณ ไม่ได้ยึดตัวแปรต้นทางไป ตัวแปรเดิมจึงยังใช้งานได้ครับ
+
+### 💡 Deep Dive: ทำไมใช้ `self` ถึงดีกว่า `&self`?
+ทำไมฟังก์ชันคณิตศาสตร์อย่าง `cos`, `sin`, `abs` ถึงเลือกใช้ `self`? ทำไมไม่ใช้ `&self` เพื่อความชัดเจน? คำตอบคือ **Performance** ครับ
+
+*   **`self` (Pass-by-value)** สำหรับข้อมูลขนาดเล็ก (เช่น `f32` = 4 bytes) CPU สามารถโหลดค่านี้เข้าไปใน **Register** ได้โดยตรงและคำนวณได้ทันที นี่คือวิธีที่เร็วที่สุด
+*   **`&self` (Pass-by-reference)** คอมพิวเตอร์ต้องส่ง **Pointer** (ซึ่งขนาด 8 bytes บนเครื่อง 64-bit) ไปที่ฟังก์ชัน จากนั้นฟังก์ชันต้องเสียเวลาวิ่งกลับไปอ่านค่าที่ Memory ปลายทางอีกที (Dereference)
+
+การใช้ `self` กับ Primitive types จึงทั้งเร็วกว่าและประหยัดหน่วยความจำกว่าครับ
+
+## แล้วถ้า Type **ไม่เป็น** `Copy` ล่ะ?
+
+สำหรับ Type ที่ซับซ้อน เช่น `String`, `Vec<T>` หรือ Struct ทั่วไป Rust จะ **ไม่** ให้เป็น `Copy` โดยอัตโนมัติ
+
+ถ้าเราประกาศเมธอดรับ `self` กับ Type เหล่านี้ จะเกิดการ **Move** ทันทีครับ
 
 ```rust
-impl SomeType {
-    fn consume(self) -> ReturnType { ... }
-}
-```
+struct MyData(String);
 
-นี่แปลว่าเมธอดจะ **ยึดครองค่าที่เราเรียกเมธอดนั้น** — หรือก็คือค่าเดิมจะถูก _moved_ เข้าไปในเมธอด
-
-**กรณีที่ชนิดข้อมูลไม่ได้ implement `Copy`:**
-
-```rust
-struct NonCopy(String);
-
-impl NonCopy {
-    fn consume(self) {}
+impl MyData {
+    fn consume_me(self) { // รับ self และ Type นี้ไม่ใช่ Copy
+        println!("Inside: {}", self.0);
+    } // self ถูก Drop (ทำลาย) ทิ้งเมื่อจบฟังก์ชันนี้
 }
 
 fn main() {
-    let n = NonCopy(String::from("test"));
-    n.consume();
-    // n.consume(); // ERROR: use of moved value: `n`
-    // println!("{:?}", n); // ERROR: ใช้ไม่ได้แล้วเพราะ n ถูก move ไปแล้ว
+    let d = MyData(String::from("Hello"));
+    d.consume_me(); // Ownership ถูกย้ายเข้าไป
+    // println!("{:?}", d); // ❌ ERROR: value used here after move
 }
 ```
 
-**กรณีที่ชนิดข้อมูล implement `Copy`:**
+## ⚠️ ระวังหลุมพราง "Silent Bug" ของ Copy Types
+
+ข้อนี้สำคัญมาก และมักเป็นจุดตายของมือใหม่ คือการใช้ `mut` กับ `self` ใน Type ที่เป็น `Copy`
+
+### สิ่งที่มักเข้าใจผิด
+เราอาจเผลอเขียนเมธอดที่รับค่าเข้ามาแก้ไข (Mutate) แต่ดันรับมาแบบ `self` (Pass by value)
 
 ```rust
-let x = 42i32;
-let y = x; // x ถูก copy (ไม่ใช่ move)
-println!("x = {}, y = {}", x, y); // ใช้ได้ทั้งคู่: x = 42, y = 42
-```
-
-## ทำไม `angle.cos()` ถึงไม่ทำให้ `angle` หายไป
-
-ชนิดข้อมูลพื้นฐานของ Rust เช่น `f32`, `i32`, `bool`, และ tuple/array ของชนิดที่เป็น Copy ล้วน implement trait `Copy` โดยอัตโนมัติ
-
-### หลักการทำงานของ `Copy` trait
-
-เมื่อชนิดข้อมูล implement `Copy`:
-
-- การส่งค่าเข้าพารามิเตอร์โดยตรง (`self` หรือผ่านฟังก์ชัน) จะ **ไม่ได้ย้าย ownership จริงๆ** แต่จะทำการ copy ค่า (ทำสำเนา) แทน
-- ดังนั้น `angle.cos()` จะทำให้ค่า `angle` ถูก _copy_ เข้าไปในเมธอด ไม่ใช่ย้ายแบบ move
-- ตัวแปรเดิมก็ยังใช้งานได้ต่อหลังจากเรียกเมธอด
-
-> **หมายเหตุ:** `Copy` หมายถึง "ทำสำเนาโดยการคัดลอก bits" ที่ compiler รู้จักและสามารถ optimize ได้ ไม่ใช่แค่ "bitwise copy" แบบ raw memory copy ธรรมดา สำหรับ primitive types อาจดูคล้ายกัน แต่สำหรับ struct ที่ implement `Copy` เอง อาจมี semantics เฉพาะของมันได้
-
-### ความสัมพันธ์กับ traits อื่นๆ
-
-```rust
-// ถ้า implement Drop จะเป็น Copy ไม่ได้
-struct HasDrop;
-impl Drop for HasDrop {
-    fn drop(&mut self) {}
-}
-// impl Copy for HasDrop {} // ERROR: the trait `Copy` may not be implemented for this type
-
-// ถ้าไม่เป็น Copy แต่อยากได้สำเนา ต้องใช้ Clone
-let s = String::from("hello");
-let s2 = s.clone(); // clone แบบชัดเจน (อาจจะช้า)
-```
-
-## ทำไมถึงใช้ `self` แทนที่จะเป็น `&self`
-
-เมื่อชนิดข้อมูลมีขนาดเล็ก เช่น `f32` หรือ `i32`:
-
-- สำหรับ types ขนาดเล็ก ความแตกต่างด้านประสิทธิภาพระหว่าง `self` กับ `&self` นั้นน้อยมากจนไม่สำคัญ
-- Compiler สามารถ optimize การ pass-by-value ให้ใช้ register ได้แทนที่จะต้องไปเข้าถึง memory
-- การรับ `self` ทำให้ API อ่านง่ายกว่า และสอดคล้องกับแนวคิด "ฟังก์ชันที่รับค่าทาง value โดยตรง"
-
-ด้วยเหตุนี้ ฟังก์ชันอย่าง `f32::cos` จึงมักประกาศด้วย `fn cos(self) -> f32` แทนที่จะเป็น `fn cos(&self) -> f32`
-
-## การใช้ `self` กับชนิดที่ไม่ได้ implement `Copy`
-
-เมื่อชนิดข้อมูลไม่ได้ implement trait `Copy` เช่น `String`, `Vec<T>`, หรือ struct ที่มีชนิดเหล่านี้อยู่
-
-- การประกาศเมธอดรับ `self` จะ **ยึดครองค่าลงในเมธอด**
-- หลังจากเรียกเมธอดแล้ว ตัวแปรเดิมจะ **ใช้งานไม่ได้อีก**
-
-ตัวอย่างที่เห็นได้ชัดคือการใช้ naming convention `into_*` สำหรับ consuming methods:
-
-```rust
-struct MyStruct(String);
-
-impl MyStruct {
-    // naming convention: into_* บอกว่าเป็น consuming method
-    fn into_inner(self) -> String {
-        self.0
-    }
-}
-
-fn main() {
-    let s = MyStruct(String::from("hello"));
-    let inner = s.into_inner(); // ownership ของ s ถูกย้ายเข้าเมธอด
-    // println!("{:?}", s); // ERROR: borrow of moved value: `s`
-    println!("{}", inner); // ใช้ได้
-}
-```
-
-## ⚠️ Copy Types กับ `&mut self` - ข้อควรระวัง
-
-นี่เป็นประเด็นสำคัญที่มักทำให้เกิด silent bug เมื่อเรียก `&mut self` บน Copy type โดยไม่รู้ตัว Rust จะสร้าง temporary copy แล้ว mutate ค่านั้น แล้วทิ้งไปทันที
-
-```rust
-#[derive(Copy, Clone)]
+#[derive(Clone, Copy, Debug)]
 struct Point { x: i32, y: i32 }
 
 impl Point {
-    fn translate(&mut self, dx: i32) {
-        self.x += dx;
-    }
+    // ⚠️ ระวัง! รับ mut self (Value) ไม่ใช่ &mut self (Reference)
+    fn move_wrong(mut self, dx: i32) {
+        self.x += dx; 
+        // สิ่งที่ถูกแก้คือ "ตัวสำเนา" (Copy) ที่อยู่ในฟังก์ชันนี้เท่านั้น
+    } // ตัวสำเนาถูกทำลายทิ้งตรงนี้
 }
 
 fn main() {
     let p = Point { x: 0, y: 0 };
-    p.translate(5); // ⚠️ สร้าง temporary copy แล้ว mutate แต่ทิ้งทันที
-    println!("{:?}", p); // ค่าไม่เปลี่ยน! p.x ยังเป็น 0
+    p.move_wrong(10); 
+    println!("{:?}", p); // 😱 ผลลัพธ์: Point { x: 0, y: 0 } ค่าไม่เปลี่ยน
 }
 ```
 
-**วิธีที่ถูกต้อง** สำหรับ Copy types ควรใช้ consuming pattern แทน
+### วิธีแก้ไข
+1.  **ถ้าจะแก้ค่าเดิม** ใช้ `&mut self` เสมอ
+2.  **ถ้าจะคืนค่าใหม่ (Functional style)** รับ `self` แล้วคืน `Self` กลับไป
 
 ```rust
 impl Point {
-    fn translated(self, dx: i32) -> Self { // คืนค่าใหม่
+    // ✅ แบบคืนค่าใหม่
+    fn moved(self, dx: i32) -> Self {
         Point { x: self.x + dx, y: self.y }
     }
 }
-
-fn main() {
-    let p = Point { x: 0, y: 0 };
-    let p = p.translated(5); // ชัดเจนว่ากำลังสร้างค่าใหม่
-    println!("{:?}", p); // Point { x: 5, y: 0 }
-}
 ```
 
-### Checklist เมื่อไหร่ที่ไม่ควรทำให้เป็น Copy
+## เมื่อไหร่ที่ไม่ควรทำเป็น Copy? (กรณีศึกษา Range)
 
-หลีกเลี่ยงการ implement `Copy` ถ้า type ของคุณ
+บางครั้งข้อมูลมีขนาดเล็ก แต่เราก็ไม่ควรให้มันเป็น `Copy` ตัวอย่างที่ดีที่สุดคือ **`Range` (เช่น `0..10`)**
 
-1. **มี `&mut self` methods ที่เปลี่ยน internal state** (เช่น Iterator)
-2. **มี invariant ที่ต้องรักษา** และการ copy อาจทำให้ state ไขว้เขวได้
-3. **มี Drop implementation** (ยังไงก็เป็น Copy ไม่ได้อยู่แล้ว)
-
-**ตัวอย่าง** `Range` ไม่เป็น Copy เพราะจะสร้างความสับสนถ้ามีหลาย iterators ที่ไขว้กัน
+ถึงแม้ Range จะเก็บแค่ตัวเลข `start` กับ `end` แต่ Rust ไม่ให้มันเป็น Copy เพราะมันทำหน้าที่เป็น **Iterator** ด้วย
 
 ```rust
-let mut range = 0..10;
-let copy_of_range = range; // ถ้า Range เป็น Copy...
-
-range.next(); // advance original
-copy_of_range.next(); // advance copy → คนใช้งงว่าทำไม range ไม่ advance
+// สมมติว่า Range เป็น Copy...
+let mut r = 0..5;
+for _ in r { ... } // r ถูก copy ไปใช้ใน loop จนหมด
+// r ตัวเดิมยังอยู่ที่ 0..5 เหมือนเดิม เพราะไม่ได้ถูก Move ไป
+for _ in r { ... } // ลูปทำงานซ้ำอีกรอบ!
 ```
+พฤติกรรมนี้จะสร้างบั๊กที่ตามหาได้ยาก Rust จึงบังคับให้ Iterator ต้องถูก **Move** เสมอ เพื่อให้แน่ใจว่าสถานะการวนลูป (Current state) มีอยู่แค่ที่เดียว
 
-## 🛠️ เทคนิคการย้าย Ownership บางส่วน
+## สรุป Checklist ในการออกแบบ
 
-เมื่อต้องการยึดครองแค่ field เดียว โดยไม่กินทั้ง struct ใช้ `Option::take()`
+เมื่อคุณเห็นหรือเขียน Method Signature ให้ตีความดังนี้
 
-```rust
-struct ConnectionManager {
-    conn: Option<Connection>,
-}
+1.  **`fn method(self)`**
+    *   **ถ้าเป็น Copy Type** แค่ทำสำเนาค่าไปใช้ (เช่น `angle.cos()`)
+    *   **ถ้าไม่ใช่ Copy Type** ยึดครอง (Move) ต้นฉบับไปเลย (เช่น `vec.into_iter()`)
+    *   *เหมาะสำหรับ* การแปลงค่า (`into_...`) หรือการคำนวณที่คืนค่าใหม่
 
-impl ConnectionManager {
-    // ย้าย ownership ออกจาก field โดยไม่กินทั้ง struct
-    fn disconnect(&mut self) -> Option<Connection> {
-        self.conn.take() // ย้าย ownership ออกจาก Option
-    }
-    
-    // หรือใช้ pattern นี้เพื่อกิน field แล้วคืนค่าที่เหลือ
-    fn into_connection(self) -> Option<Connection> {
-        self.conn // ย้าย ownership ของ field ออกมา
-    } // self ถูก drop แต่ไม่มีปัญหาเพราะเราเอา field ออกมาแล้ว
-}
-```
+2.  **`fn method(&self)`**
+    *   ขอยืมดูเฉยๆ ไม่ว่าจะเป็น Type อะไร
+    *   *เหมาะสำหรับ* การอ่านค่า, Getter (`.len()`, `.is_empty()`)
 
-## ข้อผิดพลาดที่มักเจอ
+3.  **`fn method(&mut self)`**
+    *   ขอยืมไปแก้ไข (Mutate)
+    *   *เหมาะสำหรับ* การเปลี่ยน state ภายใน (`.push()`, `.clear()`)
 
-### ข้อผิดพลาดที่ 1: คิดว่าทุกอย่างเป็น Copy
+**Naming Convention Tips**
+*   `into_*` (เช่น `into_string`) → กินค่า (`self`)
+*   `to_*` (เช่น `to_string`) → ยืมแล้วก๊อปปี้ (`&self`)
+*   `as_*` (เช่น `as_bytes`) → ยืมแล้วแปลงมุมมอง (`&self`)
 
-```rust
-let s = String::from("hello");
-let s2 = s; // String ไม่มี Copy, s ถูก move
-// println!("{}", s); // ERROR: borrow of moved value: `s`
-```
-
-### ข้อผิดพลาดที่ 2: Generic ที่ลืมคิดเรื่อง Copy
-
-```rust
-fn generic_consume<T>(val: T) {
-    // ถ้า T ไม่เป็น Copy, val จะถูก move
-    // ใช้ val ตรงนี้...
-} // ...และถูก drop ตรงนี้
-
-fn main() {
-    let s = String::from("test");
-    generic_consume(s);
-    // generic_consume(s); // ERROR ถ้า T ไม่เป็น Copy
-}
-```
-
-### ข้อผิดพลาดที่ 3: สับสนระหว่าง Copy กับ Clone
-
-```rust
-#[derive(Clone)] // มี Clone แต่ไม่มี Copy
-struct OnlyClone(i32);
-
-let a = OnlyClone(42);
-let b = a.clone(); // ต้องเรียกแบบชัดเจน
-// let c = a; // นี่คือ move ไม่ใช่ copy
-```
-
-### ข้อผิดพลาดที่ 4: ลืมว่า Copy ก็ยังเป็นการทำสำเนา
-
-```rust
-#[derive(Copy, Clone)]
-struct ID(u64);
-
-fn process(id: ID) {
-    // ถ้า ID มี side effect เมื่อถูกใช้ (เช่น logging)
-    // การ copy จะทำให้เกิด side effect ซ้ำซ้อน
-}
-```
-
-## สรุป
-
-การประกาศเมธอดใน Rust ว่า `fn foo(self)` มีความหมายดังนี้
-
-- **โดยปกติ** แปลว่าเมธอดจะ **ยึดครอง** ค่าที่เรียกใช้ (move)
-- **ถ้าชนิดข้อมูล implement `Copy`** การย้าย ownership จะถูกแปลงเป็น _copy_ แทน ทำให้ตัวแปรเดิมยังใช้งานได้
-- **การเลือกใช้** `self`, `&self`, หรือ `&mut self` ขึ้นอยู่กับว่าฟังก์ชันต้องการ
-  - กินค่าทิ้ง (consuming) → `self`
-  - อ่านค่าอย่างเดียว → `&self`
-  - แก้ไขค่า → `&mut self`
-
-### Checklist ในการอ่าน Method Signature
-
-```rust
-impl MyType {
-    fn method(self)     // ถ้า MyType: Copy → ใช้ต่อได้ / ถ้าไม่ → move
-    fn method(&self)    // ยืมแบบอ่านอย่างเดียว ใช้ต่อได้เสมอ
-    fn method(&mut self) // ยืมแบบแก้ไข ใช้ต่อได้แต่ต้องระวัง aliasing rules
-}
-```
-
-### Naming Conventions สำหรับ Ownership
-
-| Prefix | ความหมาย | ตัวอย่าง |
-|--------|---------|---------|
-| `into_*` | กินค่า, ยึดครอง | `into_inner()`, `into_string()` |
-| `as_*` | แปลงเป็น Borrow/Reference | `as_str()`, `as_slice()` |
-| `to_*` | Clone/Copy แล้วแปลง | `to_string()`, `to_vec()` |
-| `moved_*` | Copy type แบบกินค่า | `moved_x()`, `translated()` |
-
-เมื่อเข้าใจความหมายนี้แล้ว เราสามารถอ่าน signature ของเมธอดใน Rust แล้วรู้ได้ทันทีว่าฟังก์ชันนั้นจะยึดครอง หรือแค่ยืมค่าเดิม
-
-## แหล่งอ้างอิง
-
+**แหล่งอ้างอิง:**
 - [Rust Forum: Does a member function take ownership of a self argument?](https://users.rust-lang.org/t/does-a-member-function-take-ownership-of-a-self-argument/138034)
 - [The Rust Programming Language - Ownership](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html)
 - [Rust Reference: Copy Trait](https://doc.rust-lang.org/reference/items/traits.html#copy-and-clone)
