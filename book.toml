@@ -8,6 +8,7 @@ description = "คู่มือแก้ปัญหา Rust Programming ภ�
 site-url = "https://pharmacist-sabot.github.io/rust-problem-solving/"
 git-repository-url = "https://github.com/pharmacist-sabot/rust-problem-solving"
 additional-css = ["theme/custom.css"]
+default-theme = "ayu"
 
 [output.html.playground]
 editable = true
