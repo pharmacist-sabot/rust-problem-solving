@@ -21,7 +21,7 @@ struct OtherCtx<'s> {
 
 impl<'s> LayoutCtx<'s> {
     fn fee(&self) { }
-    
+
     // พยายามแปลงเป็น OtherCtx โดยใช้ lifetime 's เดิม
     fn to_other_ctx(&mut self) -> OtherCtx<'s> {
         OtherCtx {
@@ -101,7 +101,6 @@ let mut other_ctx = lo_ctx.to_other_ctx();
 เราสามารถใช้ **Anonymous Lifetime (`'_`)** เพื่อบอก Rust ว่าให้คำนวณ Lifetime ตามบริบทการใช้งานจริง:
 
 ```rust
-```rust
 impl<'s> LayoutCtx<'s> {
     // แบบย่อ (Recommended)
     fn to_other_ctx(&mut self) -> OtherCtx<'_> {
@@ -109,7 +108,7 @@ impl<'s> LayoutCtx<'s> {
             window_state: self.window_state
         }
     }
-    
+
     // แบบเต็ม (Explicit Lifetime) เพื่อให้เห็นภาพชัดเจน
     // 'a คือ lifetime ของการยืม &mut self
     // เราคืน OtherCtx<'a> ที่มีอายุเท่ากับ 'a
@@ -154,12 +153,12 @@ impl<'s> LayoutCtx<'s> {
 fn build_ui(mut layout_ctx: LayoutCtx) {
     // 1. แปลงเป็น Context ย่อยเพื่อวาดปุ่ม
     {
-        let mut other_ctx = layout_ctx.to_other_ctx(); 
+        let mut other_ctx = layout_ctx.to_other_ctx();
         other_ctx.faa(); // ใช้ other_ctx ทำงานบางอย่าง...
     } // จบ scope: other_ctx คืนสิทธิ์การยืมกลับไปที่ layout_ctx
 
     // 2. LayoutCtx กลับมาใช้งานต่อได้ (ไม่ถูก move หายไป)
-    layout_ctx.fee(); 
+    layout_ctx.fee();
 }
 ```
 
