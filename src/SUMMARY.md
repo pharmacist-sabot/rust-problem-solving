@@ -3,6 +3,7 @@
 # Part I: พื้นฐานการจัดการ Ownership, Borrowing และ Lifetime
 - [OB 001: การเป็นเจ้าของของ `self` ในฟังก์ชันเมมเบอร์](./ob001-ownership-of-a-self-argument.md)
 - [OB 002: Reborrowing และการแปลงโครงสร้างข้อมูล](./ob002-reborrowing-and-struct-transformation.md)
+- [OB 003: กับดักของ `read_line` ในลูป](./ob003-read-line-traps-in-loops.md)
 
 # Part II: ระบบประเภทข้อมูล (Type System)
 
