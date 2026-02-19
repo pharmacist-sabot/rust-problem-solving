@@ -13,3 +13,8 @@ default-theme = "ayu"
 [output.html.playground]
 editable = true
 line-numbers = true
+
+[output.html.redirect]
+"/ob001-ownership-of-a-self-argument.html" = "/part-01-ownership/self-ownership.html"
+"/ob002-reborrowing-and-struct-transformation.html" = "/part-01-ownership/reborrowing-transform.html"
+"/ob003-read-line-traps-in-loops.html" = "/part-01-ownership/read-line-traps.html"

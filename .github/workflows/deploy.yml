@@ -24,6 +24,28 @@ jobs:
         with:
           mdbook-version: "latest"
 
+      - name: Validate SUMMARY.md structure
+        run: |
+          echo "Checking for legacy obXXX paths..."
+          if grep -E "ob[0-9]+" src/SUMMARY.md; then
+            echo "ERROR: Legacy obXXX paths found in SUMMARY.md"
+            exit 1
+          fi
+
+          echo "Checking for tab indentation..."
+          if grep -P "^\t" src/SUMMARY.md; then
+            echo "ERROR: Use spaces, not tabs for indentation in SUMMARY.md"
+            exit 1
+          fi
+
+          echo "Counting parts and chapters..."
+          PART_COUNT=$(grep -c "^# Part\|^# Appendices" src/SUMMARY.md || true)
+          CHAPTER_COUNT=$(grep -cE "^\s*- \[" src/SUMMARY.md || true)
+          echo "Parts: $PART_COUNT"
+          echo "Chapters: $CHAPTER_COUNT"
+
+          echo "SUMMARY.md validation passed!"
+
       - name: Build Book
         run: |
           mdbook build
