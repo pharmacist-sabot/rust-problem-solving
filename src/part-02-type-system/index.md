@@ -1,10 +1,3 @@
----
-title: "Part II: ระบบประเภทข้อมูล (Type System)"
-description: "เรียนรู้ระบบ Type System อันทรงพลังของ Rust ตั้งแต่ Generics, Trait Bounds, Associated Types ไปจนถึง Dynamic Dispatch"
-part_number: 2
-lang: th
----
-
 # Part II: ระบบประเภทข้อมูล (Type System)
 
 ## เป้าหมายการเรียนรู้ (Learning Objectives)
