@@ -1,13 +1,6 @@
----
-title: "Part I: พื้นฐานการจัดการ Ownership, Borrowing และ Lifetime"
-description: "เรียนรู้แนวคิดหลักของ Rust เรื่อง Ownership, Borrowing และ Lifetime ผ่านปัญหาจริงที่นักพัฒนาพบบ่อย"
-part_number: 1
-lang: th
----
-
 # Part I: พื้นฐานการจัดการ Ownership, Borrowing และ Lifetime
 
-ระบบ Ownership คือหัวใจสำคัญที่ทำให้ Rust แตกต่างจากภาษาอื่น — มันคือกลไกที่ช่วยจัดการหน่วยความจำอย่างปลอดภัย โดยไม่ต้องพึ่ง Garbage Collector และตรวจจับบั๊กที่เกี่ยวกับ Memory ได้ตั้งแต่ตอนคอมไพล์
+ระบบ Ownership คือหัวใจสำคัญที่ทำให้ Rust แตกต่างจากภาษาอื่น มันคือกลไกที่ช่วยจัดการหน่วยความจำอย่างปลอดภัย โดยไม่ต้องพึ่ง Garbage Collector และตรวจจับบั๊กที่เกี่ยวกับ Memory ได้ตั้งแต่ตอนคอมไพล์
 
 แต่ระบบนี้ก็มาพร้อมกับ **กับดัก** และ **ความสับสน** มากมายที่แม้แต่นักพัฒนาที่มีประสบการณ์ก็ยังเจอ Part นี้จะพาคุณไปเจาะลึกปัญหาเหล่านั้นผ่านกรณีศึกษาจริง
 
@@ -36,7 +29,7 @@ lang: th
 
 ## ก่อนอ่านส่วนนี้
 
-ควรรู้พื้นฐาน:
+ควรรู้พื้นฐาน
 
 - Syntax พื้นฐานของ Rust (ประกาศตัวแปร, ฟังก์ชัน, Struct)
 - แนวคิด Ownership เบื้องต้น (Move, Borrow) จาก [The Rust Programming Language](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
