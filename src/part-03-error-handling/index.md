@@ -1,10 +1,3 @@
----
-title: "Part III: การจัดการข้อผิดพลาด (Error Handling)"
-description: "เรียนรู้วิธีจัดการข้อผิดพลาดใน Rust อย่างมีประสิทธิภาพด้วย Result, Option และ Pattern ต่างๆ"
-part_number: 3
-lang: th
----
-
 # Part III: การจัดการข้อผิดพลาด (Error Handling)
 
 ## เป้าหมายการเรียนรู้ (Learning Objectives)
