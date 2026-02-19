@@ -51,7 +51,7 @@
 <!-- Appendices -->
 # Appendices
 
-- [A. Glossary — ศัพท์เทคนิค](appendices/glossary.md)
-- [B. FAQ — คำถามที่พบบ่อย](appendices/faq.md)
-- [C. Troubleshooting Index](appendices/troubleshooting.md)
-- [D. รายชื่อผู้ร่วมพัฒนา](appendices/contributors.md)
+- [Glossary — ศัพท์เทคนิค](appendices/glossary.md)
+- [FAQ — คำถามที่พบบ่อย](appendices/faq.md)
+- [Troubleshooting Index](appendices/troubleshooting.md)
+- [รายชื่อผู้ร่วมพัฒนา](appendices/contributors.md)
