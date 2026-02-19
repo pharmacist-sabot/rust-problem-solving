@@ -1,10 +1,3 @@
----
-title: "Part V: Unsafe Rust และ FFI"
-description: "เรียนรู้การใช้ Unsafe Rust อย่างปลอดภัยและการเชื่อมต่อกับภาษา C ผ่าน FFI"
-part_number: 5
-lang: th
----
-
 # Part V: Unsafe Rust และ FFI
 
 ## เป้าหมายการเรียนรู้ (Learning Objectives)
