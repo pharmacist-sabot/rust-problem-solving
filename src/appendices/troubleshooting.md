@@ -1,10 +1,4 @@
----
-title: "C. Troubleshooting Index"
-description: "ดัชนีรวมปัญหาที่พบบ่อยใน Rust พร้อมวิธีแก้ไข จัดเรียงตาม Error Code"
-lang: th
----
-
-# C. Troubleshooting Index — ดัชนีแก้ปัญหา
+# Troubleshooting Index — ดัชนีแก้ปัญหา
 
 รวมปัญหาและ Error ที่พบบ่อยในการเขียน Rust จัดเรียงตามหมวดหมู่เพื่อให้ค้นหาได้ง่าย พร้อมลิงก์ไปยังบทเรียนที่อธิบายรายละเอียดเพิ่มเติม
 
