@@ -1,10 +1,3 @@
----
-title: "Part VI: Patterns และ Idioms"
-description: "รวมรูปแบบการเขียนโค้ด (Design Patterns) และสำนวนเฉพาะ (Idioms) ที่นิยมใช้ใน Rust"
-part_number: 6
-lang: th
----
-
 # Part VI: Patterns และ Idioms
 
 ## เป้าหมายการเรียนรู้ (Learning Objectives)
@@ -36,5 +29,5 @@ lang: th
 
 ## หลังอ่านส่วนนี้ แนะนำให้อ่าน
 
-- [A. Glossary — ศัพท์เทคนิค](../appendices/glossary.md)
-- [B. FAQ — คำถามที่พบบ่อย](../appendices/faq.md)
+- [Glossary — ศัพท์เทคนิค](../appendices/glossary.md)
+- [FAQ — คำถามที่พบบ่อย](../appendices/faq.md)
