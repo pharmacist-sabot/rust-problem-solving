@@ -1,10 +1,3 @@
----
-title: "Part IV: Concurrency และ Parallelism"
-description: "เรียนรู้การเขียนโปรแกรมแบบ Concurrent และ Parallel ใน Rust อย่างปลอดภัย"
-part_number: 4
-lang: th
----
-
 # Part IV: Concurrency และ Parallelism
 
 ## เป้าหมายการเรียนรู้ (Learning Objectives)
