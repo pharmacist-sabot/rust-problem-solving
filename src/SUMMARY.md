@@ -10,7 +10,6 @@
   - [OB 002: Reborrowing ในเมธอดและการแปลงโครงสร้างข้อมูล](part-01-ownership/reborrowing-transform.md)
   - [OB 003: กับดักของ read_line ในลูป (The Infinite Append & Borrowing)](part-01-ownership/read-line-traps.md)
 
-
 <!-- Part II: Type System -->
 # Part II: ระบบประเภทข้อมูล (Type System)
 
