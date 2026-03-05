@@ -24,6 +24,7 @@ io::stdin().read_line(&mut buf).unwrap();
 เหตุผลหลักคือ **Performance** — เมื่อเราเป็นผู้ถือ Buffer เอง เราสามารถ **นำ Buffer กลับมาใช้ซ้ำ** ได้ในรอบถัดไป โดยไม่ต้อง Allocate หน่วยความจำใหม่ทุกครั้ง ซึ่งในงานที่ต้องอ่านข้อมูลจำนวนมาก (เช่น อ่านไฟล์หลายล้านบรรทัด) ความต่างนี้มีผลอย่างมาก
 
 นี่คือ Pattern ดั้งเดิมที่ใช้กันมาตั้งแต่ C โดยมีข้อดี 3 ประการ:
+
 - **ลด Allocation** — ใช้ Buffer เดิมซ้ำได้ ไม่ต้องจองหน่วยความจำใหม่ทุกรอบ
 - **แยกความรับผิดชอบ** — ตัว I/O ทำหน้าที่แค่อ่าน ส่วนการจัดการ Memory เป็นเรื่องของผู้เรียก
 - **ยืดหยุ่นเรื่อง Lifetime** — Buffer และ Stream มี Lifetime เป็นอิสระต่อกัน
@@ -56,11 +57,11 @@ fn main() {
 
 **ผลลัพธ์ที่ได้ (ความหายนะ):**
 
-| รอบ | พิมพ์   | ค่าจริงใน buffer     | `.trim()` ได้          | ตรวจ `== "exit"`? |
-|-----|---------|----------------------|------------------------|--------------------|
-| 1   | `A`     | `"A\n"`              | `"A"`                  | ❌                 |
-| 2   | `B`     | `"A\nB\n"`           | `"A\nB"`               | ❌                 |
-| 3   | `exit`  | `"A\nB\nexit\n"`     | `"A\nB\nexit"`         | ❌ ตลอดกาล!       |
+| รอบ | พิมพ์ | ค่าจริงใน buffer | `.trim()` ได้ | ตรวจ `== "exit"`? |
+|------|---------|--------------------------|---------------------|---------------------|
+| 1    | `A`     | `"A\n"`                  | `"A"`               | ❌                  |
+| 2    | `B`     | `"A\nB\n"`               | `"A\nB"`            | ❌                  |
+| 3    | `exit`  | `"A\nB\nexit\n"`         | `"A\nB\nexit"`      | ❌ ตลอดกาล!       |
 
 **สาเหตุ:**
 ฟังก์ชัน `read_line` ถูกออกแบบมาให้ **Append (ต่อท้าย)** ข้อมูลลงใน String buffer เสมอ ไม่ใช่ **Overwrite (เขียนทับ)** — เอกสารของ Rust ระบุชัดเจนว่า:
@@ -74,7 +75,7 @@ fn main() {
 
 > 💡 **สังเกต:** `.trim()` ตัดแค่ Whitespace ที่ **หัว** และ **ท้าย** เท่านั้น ไม่ได้ตัด `\n` ที่อยู่ **ตรงกลาง** ของ String
 
-**วิธีแก้ (Solution A): ล้าง Buffer ทุกรอบ**
+### วิธีแก้ (Solution A): ล้าง Buffer ทุกรอบ
 
 ต้องสั่ง `.clear()` ก่อนอ่านค่าใหม่ในแต่ละรอบ:
 
@@ -125,7 +126,7 @@ fn main() {
 
 > 📝 **หมายเหตุ:** Error นี้คือ **E0502** (cannot borrow as mutable because it is also borrowed as immutable) ไม่ใช่ E0499 ซึ่งเป็น error ของการยืม Mutable ซ้ำ 2 ครั้ง
 
-**วิธีแก้ (Solution B): สร้างค่าใหม่ที่เป็น Owned Type**
+### วิธีแก้ (Solution B): สร้างค่าใหม่ที่เป็น Owned Type
 
 ถ้าต้องการเก็บค่าข้ามรอบลูป เราเก็บ Reference ไม่ได้ ต้อง **สร้าง String ใหม่** ที่เป็นเจ้าของข้อมูลเอง:
 
@@ -201,6 +202,7 @@ fn main() {
 ```
 
 > **สิ่งที่ `lines()` ทำให้อัตโนมัติ:**
+>
 > - ตัด `\n` ออกให้เรียบร้อย
 > - คืน `String` ใหม่ (Owned) ทุกบรรทัด — ไม่มีปัญหา Borrow ข้ามรอบ
 > - Wrap ใน `Result` เพื่อจัดการ I/O Error ได้
@@ -221,7 +223,8 @@ fn main() {
 
 ---
 
-**แหล่งอ้างอิง:**
+### แหล่งอ้างอิง
+
 - [Rust Documentation: std::io::Stdin::read\_line](https://doc.rust-lang.org/std/io/struct.Stdin.html#method.read_line)
 - [Rust by Example: Read Lines](https://doc.rust-lang.org/rust-by-example/std_misc/file/read_lines.html)
 - [Rust Forum: Error when using read\_line in a loop](https://users.rust-lang.org/t/error-when-using-read-line-in-a-loop/138278)

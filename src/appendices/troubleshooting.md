@@ -19,6 +19,7 @@ println!("{}", s);  // ❌ E0382: value used here after move
 **สาเหตุ:** ตัวแปรที่ไม่ได้ implement `Copy` trait จะถูกย้ายความเป็นเจ้าของ (Move) เมื่อ assign ให้ตัวแปรอื่นหรือส่งเข้าฟังก์ชัน
 
 **วิธีแก้:**
+
 - ใช้ `.clone()` เพื่อสร้างสำเนา
 - ใช้ Reference (`&s`) แทนการส่งค่าตรงๆ
 - ปรับ API ให้รับ `&self` แทน `self`
@@ -41,6 +42,7 @@ println!("{}", trimmed);
 **สาเหตุ:** Rust ไม่อนุญาตให้มี `&mut` และ `&` ของตัวแปรเดียวกันอยู่พร้อมกัน เพื่อป้องกัน Data Race
 
 **วิธีแก้:**
+
 - ใช้ `.to_string()` หรือ `.to_owned()` เพื่อสร้าง Owned Value แทนการเก็บ Reference
 - จัดลำดับ Scope ให้ Immutable Borrow จบก่อนที่จะเริ่ม Mutable Borrow
 
@@ -61,6 +63,7 @@ let second = &mut v[1];  // ❌ E0499
 **สาเหตุ:** กฎ Aliasing XOR Mutation — Mutable Reference ต้องมีได้เพียงตัวเดียวในขณะใดขณะหนึ่ง
 
 **วิธีแก้:**
+
 - แยก Scope ของแต่ละ Mutable Borrow
 - ใช้ `split_at_mut()` สำหรับ Slice
 - พิจารณาใช้ `Cell` หรือ `RefCell` สำหรับ Interior Mutability
@@ -83,6 +86,7 @@ fn to_other_ctx(&mut self) -> OtherCtx<'s> {
 **สาเหตุ:** การเข้าถึง Field ผ่าน `&mut self` เป็น Reborrow ที่มี Lifetime สั้นกว่า Lifetime ดั้งเดิมของ Field
 
 **วิธีแก้:**
+
 - ใช้ Anonymous Lifetime `'_` ใน Return Type: `-> OtherCtx<'_>`
 - หรือระบุ Lifetime แบบ Explicit ที่ผูกกับ `&mut self`
 
@@ -101,6 +105,7 @@ struct Foo {
 ```
 
 **วิธีแก้:**
+
 - เพิ่ม Lifetime Parameter: `struct Foo<'a> { data: &'a str }`
 - หากเป็นกรณีง่ายใน Function ให้อาศัย Lifetime Elision Rules
 
@@ -124,6 +129,7 @@ loop {
 **สาเหตุ:** `read_line()` ออกแบบมาให้ **Append** ข้อมูลต่อท้ายเสมอ ไม่ใช่ Overwrite
 
 **วิธีแก้:**
+
 - เรียก `.clear()` ก่อน `read_line()` ทุกรอบ
 - หรือประกาศ `String::new()` ภายในลูป
 - หรือใช้ `stdin().lock().lines()` แทน
@@ -150,6 +156,7 @@ impl Point {
 **สาเหตุ:** สำหรับ Copy Type การรับ `self` (by value) จะทำสำเนาเข้ามา การแก้ไขจึงเกิดขึ้นกับสำเนาเท่านั้น
 
 **วิธีแก้:**
+
 - ใช้ `&mut self` หากต้องการแก้ไขค่าเดิม
 - หรือ Return `Self` กลับไป (Functional style): `fn moved(self, dx: i32) -> Self`
 

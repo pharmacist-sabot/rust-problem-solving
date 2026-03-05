@@ -1,35 +1,11 @@
-# Part II: ระบบประเภทข้อมูล (Type System)
+# ระบบประเภทข้อมูล (Type System)
 
-## เป้าหมายการเรียนรู้ (Learning Objectives)
+ระบบ Type System ของ Rust เป็นหนึ่งในจุดเด่นที่ทำให้ภาษานี้ทั้งปลอดภัยและยืดหยุ่น Rust ใช้ Static Typing ร่วมกับ Trait System ที่ทรงพลัง ทำให้สามารถเขียนโค้ดที่ Generic และ Reusable ได้โดยไม่เสียประสิทธิภาพ
 
-หลังจากอ่าน Part นี้จบ คุณจะสามารถ:
-- [ ] เข้าใจและใช้งาน Generic Types ร่วมกับ Trait Bounds ได้อย่างมีประสิทธิภาพ
-- [ ] แยกแยะความแตกต่างระหว่าง Associated Types และ Generic Type Parameters ได้
-- [ ] เลือกใช้ Static Dispatch และ Dynamic Dispatch ได้เหมาะสมกับสถานการณ์
-- [ ] ออกแบบ API ที่ยืดหยุ่นโดยใช้ระบบ Type System ของ Rust
+ความท้าทายที่นักพัฒนามักเจอในหมวดนี้คือการเลือกระหว่าง Generic Type Parameters กับ Associated Types, การตัดสินใจใช้ Static Dispatch หรือ Dynamic Dispatch, และการออกแบบ API ที่ใช้ Trait Bounds อย่างเหมาะสมโดยไม่ทำให้ Type Signature ซับซ้อนเกินไป
 
-## บทเรียนในส่วนนี้
+Part นี้จะพาคุณเจาะลึกแนวคิดเหล่านี้ผ่านปัญหาจริงที่เกิดขึ้นในการพัฒนาซอฟต์แวร์ด้วย Rust ตั้งแต่การใช้ Generics อย่างมีประสิทธิภาพ ไปจนถึงการทำ Type Erasure สำหรับ Dynamic Dispatch
 
-> 🚧 **อยู่ระหว่างการจัดทำ** — บทเรียนในส่วนนี้กำลังถูกเขียนและจะเผยแพร่เร็วๆ นี้
-
-- Generic Types และ Trait Bounds *(Coming Soon)*
-- Associated Types *(Coming Soon)*
-- Type Erasure และ Dynamic Dispatch *(Coming Soon)*
-
-## แนวทางการอ่าน
-
-- **สำหรับมือใหม่**: อ่านตามลำดับ เริ่มจากบทแรก เพราะแต่ละบทต่อยอดจากความรู้ก่อนหน้า
-- **สำหรับผู้มีประสบการณ์**: สามารถข้ามไปบทที่สนใจได้ โดยเฉพาะเรื่อง Type Erasure ที่เป็นหัวข้อขั้นสูง
-- **เวลาที่ใช้**: ประมาณ 2-3 ชั่วโมง
-
-## ก่อนอ่านส่วนนี้
-
-ควรรู้พื้นฐาน:
-- Ownership, Borrowing และ Lifetime ([Part I](../part-01-ownership/index.md))
-- Trait พื้นฐานใน Rust (เช่น `Display`, `Debug`, `Clone`)
-- การใช้งาน Struct และ Enum เบื้องต้น
-
-## หลังอ่านส่วนนี้ แนะนำให้อ่าน
-
-- [Part III: การจัดการข้อผิดพลาด (Error Handling)](../part-03-error-handling/index.md) — นำ Type System ไปประยุกต์ใช้กับ Error Types
-- [Part VI: Patterns และ Idioms](../part-06-patterns/index.md) — รูปแบบการออกแบบที่ใช้ Type System เป็นแกนหลัก
+## เนื้อหาในส่วนนี้
+<!-- AUTO-INDEX-START -->
+<!-- AUTO-INDEX-END -->

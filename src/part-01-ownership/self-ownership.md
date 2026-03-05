@@ -60,18 +60,20 @@ fn main() {
 ใน Rust ชนิดข้อมูลพื้นฐาน (Primitives) ที่มีขนาดเล็ก เช่น `f32`, `i32`, `bool`, `char` จะถูก implement trait ที่ชื่อว่า `Copy` โดยอัตโนมัติ
 
 ### ความลับของ `Copy` Trait (Semantics vs Mechanics)
+
 นี่คือจุดที่น่าสนใจจากมุมมองเชิงลึก
 
-1.  **ในทางความหมาย (Semantics)** การประกาศ `fn(self)` คือการประกาศเจตนาว่า **"ฉันต้องการครอบครองค่านี้" (Move semantics)** เสมอ
-2.  **ในทางกลไก (Mechanics)** แต่ถ้า Type นั้นมี `Copy` trait แปะอยู่ คอมไพเลอร์จะเปลี่ยนพฤติกรรมจากการ "ย้ายความเป็นเจ้าของ" (ทำให้ตัวเดิมใช้ไม่ได้) เป็นการ **"ทำสำเนาบิต" (Bitwise Copy)** เข้าไปแทน
+1. **ในทางความหมาย (Semantics)** การประกาศ `fn(self)` คือการประกาศเจตนาว่า **"ฉันต้องการครอบครองค่านี้" (Move semantics)** เสมอ
+2. **ในทางกลไก (Mechanics)** แต่ถ้า Type นั้นมี `Copy` trait แปะอยู่ คอมไพเลอร์จะเปลี่ยนพฤติกรรมจากการ "ย้ายความเป็นเจ้าของ" (ทำให้ตัวเดิมใช้ไม่ได้) เป็นการ **"ทำสำเนาบิต" (Bitwise Copy)** เข้าไปแทน
 
 ดังนั้น `angle.cos()` จึงแค่ "สำเนา" ค่าของ `angle` เข้าไปคำนวณ ไม่ได้ยึดตัวแปรต้นทางไป ตัวแปรเดิมจึงยังใช้งานได้ครับ
 
 ### 💡 Deep Dive: ทำไมใช้ `self` ถึงดีกว่า `&self`?
+
 ทำไมฟังก์ชันคณิตศาสตร์อย่าง `cos`, `sin`, `abs` ถึงเลือกใช้ `self`? ทำไมไม่ใช้ `&self` เพื่อความชัดเจน? คำตอบคือ **Performance** ครับ
 
-*   **`self` (Pass-by-value)** สำหรับข้อมูลขนาดเล็ก (เช่น `f32` = 4 bytes) CPU สามารถโหลดค่านี้เข้าไปใน **Register** ได้โดยตรงและคำนวณได้ทันที นี่คือวิธีที่เร็วที่สุด
-*   **`&self` (Pass-by-reference)** คอมพิวเตอร์ต้องส่ง **Pointer** (ซึ่งขนาด 8 bytes บนเครื่อง 64-bit) ไปที่ฟังก์ชัน จากนั้นฟังก์ชันต้องเสียเวลาวิ่งกลับไปอ่านค่าที่ Memory ปลายทางอีกที (Dereference)
+- **`self` (Pass-by-value)** สำหรับข้อมูลขนาดเล็ก (เช่น `f32` = 4 bytes) CPU สามารถโหลดค่านี้เข้าไปใน **Register** ได้โดยตรงและคำนวณได้ทันที นี่คือวิธีที่เร็วที่สุด
+- **`&self` (Pass-by-reference)** คอมพิวเตอร์ต้องส่ง **Pointer** (ซึ่งขนาด 8 bytes บนเครื่อง 64-bit) ไปที่ฟังก์ชัน จากนั้นฟังก์ชันต้องเสียเวลาวิ่งกลับไปอ่านค่าที่ Memory ปลายทางอีกที (Dereference)
 
 การใช้ `self` กับ Primitive types จึงทั้งเร็วกว่าและประหยัดหน่วยความจำกว่าครับ
 
@@ -102,6 +104,7 @@ fn main() {
 ข้อนี้สำคัญมาก และมักเป็นจุดตายของมือใหม่ คือการใช้ `mut` กับ `self` ใน Type ที่เป็น `Copy`
 
 ### สิ่งที่มักเข้าใจผิด
+
 เราอาจเผลอเขียนเมธอดที่รับค่าเข้ามาแก้ไข (Mutate) แต่ดันรับมาแบบ `self` (Pass by value)
 
 ```rust
@@ -124,8 +127,9 @@ fn main() {
 ```
 
 ### วิธีแก้ไข
-1.  **ถ้าจะแก้ค่าเดิม** ใช้ `&mut self` เสมอ
-2.  **ถ้าจะคืนค่าใหม่ (Functional style)** รับ `self` แล้วคืน `Self` กลับไป
+
+1. **ถ้าจะแก้ค่าเดิม** ใช้ `&mut self` เสมอ
+2. **ถ้าจะคืนค่าใหม่ (Functional style)** รับ `self` แล้วคืน `Self` กลับไป
 
 ```rust
 impl Point {
@@ -149,33 +153,34 @@ for _ in r { ... } // r ถูก copy ไปใช้ใน loop จนหม�
 // r ตัวเดิมยังอยู่ที่ 0..5 เหมือนเดิม เพราะไม่ได้ถูก Move ไป
 for _ in r { ... } // ลูปทำงานซ้ำอีกรอบ!
 ```
+
 พฤติกรรมนี้จะสร้างบั๊กที่ตามหาได้ยาก Rust จึงบังคับให้ Iterator ต้องถูก **Move** เสมอ เพื่อให้แน่ใจว่าสถานะการวนลูป (Current state) มีอยู่แค่ที่เดียว
 
 ## สรุป Checklist ในการออกแบบ
 
 เมื่อคุณเห็นหรือเขียน Method Signature ให้ตีความดังนี้
 
-1.  **`fn method(self)`**
-    *   **ถ้าเป็น Copy Type** แค่ทำสำเนาค่าไปใช้ (เช่น `angle.cos()`)
-    *   **ถ้าไม่ใช่ Copy Type** ยึดครอง (Move) ต้นฉบับไปเลย (เช่น `vec.into_iter()`)
-    *   *เหมาะสำหรับ* การแปลงค่า (`into_...`) หรือการคำนวณที่คืนค่าใหม่
+1. **`fn method(self)`**
+    - **ถ้าเป็น Copy Type** แค่ทำสำเนาค่าไปใช้ (เช่น `angle.cos()`)
+    - **ถ้าไม่ใช่ Copy Type** ยึดครอง (Move) ต้นฉบับไปเลย (เช่น `vec.into_iter()`)
+    - *เหมาะสำหรับ* การแปลงค่า (`into_...`) หรือการคำนวณที่คืนค่าใหม่
 
-2.  **`fn method(&self)`**
-    *   ขอยืมดูเฉยๆ ไม่ว่าจะเป็น Type อะไร
-    *   *เหมาะสำหรับ* การอ่านค่า, Getter (`.len()`, `.is_empty()`)
+2. **`fn method(&self)`**
+    - ขอยืมดูเฉยๆ ไม่ว่าจะเป็น Type อะไร
+    - *เหมาะสำหรับ* การอ่านค่า, Getter (`.len()`, `.is_empty()`)
 
-3.  **`fn method(&mut self)`**
-    *   ขอยืมไปแก้ไข (Mutate)
-    *   *เหมาะสำหรับ* การเปลี่ยน state ภายใน (`.push()`, `.clear()`)
+3. **`fn method(&mut self)`**
+    - ขอยืมไปแก้ไข (Mutate)
+    - *เหมาะสำหรับ* การเปลี่ยน state ภายใน (`.push()`, `.clear()`)
 
-**Naming Convention Tips**
-*   `into_*` (เช่น `into_string`) → กินค่า (`self`)
-*   `to_*` (เช่น `to_string`) → ยืมแล้วก๊อปปี้ (`&self`)
-*   `as_*` (เช่น `as_bytes`) → ยืมแล้วแปลงมุมมอง (`&self`)
+### Naming Convention Tips
 
-**แหล่งอ้างอิง:**
+- `into_*` (เช่น `into_string`) → กินค่า (`self`)
+- `to_*` (เช่น `to_string`) → ยืมแล้วก๊อปปี้ (`&self`)
+- `as_*` (เช่น `as_bytes`) → ยืมแล้วแปลงมุมมอง (`&self`)
+
+### แหล่งอ้างอิง
+
 - [Rust Forum: Does a member function take ownership of a self argument?](https://users.rust-lang.org/t/does-a-member-function-take-ownership-of-a-self-argument/138034)
 - [The Rust Programming Language - Ownership](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html)
 - [Rust Reference: Copy Trait](https://doc.rust-lang.org/reference/items/traits.html#copy-and-clone)
-
-

@@ -19,6 +19,7 @@ Type ที่ถูกกำหนดไว้ภายใน Trait Definition 
 
 ### Borrow / Borrowing (การยืม)
 การเข้าถึงข้อมูลโดยไม่ย้าย Ownership มี 2 แบบ:
+
 - **Shared Borrow** (`&T`) — ยืมอ่านอย่างเดียว มีได้หลายตัวพร้อมกัน
 - **Mutable Borrow** (`&mut T`) — ยืมไปแก้ไข มีได้เพียงตัวเดียว
 
@@ -113,6 +114,7 @@ Enum ที่แทน "มีค่า" (`Some(T)`) หรือ "ไม่ม
 
 ### Pointer (ตัวชี้)
 ค่าที่เก็บ Memory Address ของข้อมูล ใน Rust มี 2 ประเภทหลัก:
+
 - **Reference** (`&T`, `&mut T`) — ปลอดภัย ถูกตรวจสอบโดย Borrow Checker
 - **Raw Pointer** (`*const T`, `*mut T`) — ไม่ถูกตรวจสอบ ต้องใช้ภายใน `unsafe`
 
@@ -136,6 +138,7 @@ Enum ที่แทน "สำเร็จ" (`Ok(T)`) หรือ "ผิด�
 ช่วงของโค้ดที่ตัวแปรยังคง Valid อยู่ โดยทั่วไปคือตั้งแต่จุดที่ประกาศจนถึงปีกกาปิด `}` เมื่อออกจาก Scope ค่าจะถูก Drop
 
 ### Self / self
+
 - `Self` (ตัวใหญ่) — อ้างถึง Type ของ `impl` block ปัจจุบัน
 - `self` (ตัวเล็ก) — อ้างถึง Instance ของ Type ปัจจุบัน ใช้เป็น Parameter แรกของ Method
 
@@ -146,6 +149,7 @@ Enum ที่แทน "สำเร็จ" (`Ok(T)`) หรือ "ผิด�
 กลไกที่ Rust เลือกฟังก์ชันที่จะเรียกตอน Compile Time (ผ่าน Monomorphization) ทำให้ไม่มี Runtime Cost เพิ่ม ใช้กับ Generics + Trait Bounds
 
 ### String vs &str
+
 - `String` — เป็น Owned Type เก็บข้อมูลบน Heap สามารถแก้ไขได้
 - `&str` — เป็น Borrowed Type (String Slice) ชี้ไปยังข้อมูลที่อยู่ที่อื่น ไม่สามารถแก้ไขได้โดยตรง
 
@@ -164,6 +168,7 @@ Enum ที่แทน "สำเร็จ" (`Ok(T)`) หรือ "ผิด�
 
 ### Unsafe
 คำสำคัญที่ใช้ระบุว่าโค้ดส่วนนั้นอยู่นอกเหนือการรับประกันความปลอดภัยของ Rust Compiler ทำให้สามารถ:
+
 - Dereference Raw Pointer
 - เรียกใช้ Unsafe Function
 - เข้าถึง/แก้ไข Static Mutable Variable

@@ -1,35 +1,11 @@
-# Part V: Unsafe Rust และ FFI
+# Unsafe Rust และ FFI
 
-## เป้าหมายการเรียนรู้ (Learning Objectives)
+Rust ถูกออกแบบมาให้ปลอดภัยเป็นค่าเริ่มต้น แต่มีบางสถานการณ์ที่ต้องก้าวข้าม Safety Guarantee เหล่านั้น เช่น การเข้าถึง Hardware โดยตรง การ Optimize Performance ในระดับต่ำ หรือการเรียกใช้โค้ดจากภาษาอื่น Rust จึงมี `unsafe` Keyword เพื่อเปิดช่องทางให้ทำสิ่งเหล่านี้ได้อย่างมีขอบเขตชัดเจน
 
-หลังจากอ่าน Part นี้จบ คุณจะสามารถ:
-- [ ] เข้าใจว่าเมื่อไหร่ที่จำเป็นต้องใช้ `unsafe` และเมื่อไหร่ที่ไม่ควรใช้
-- [ ] ใช้ Raw Pointers (`*const T`, `*mut T`) ได้อย่างถูกต้องและปลอดภัย
-- [ ] เขียน Unsafe Block และ Unsafe Function พร้อม Safety Invariants ที่ชัดเจน
-- [ ] เรียกใช้ฟังก์ชันจากภาษา C ผ่าน Foreign Function Interface (FFI)
-- [ ] สร้าง Safe Abstraction ครอบ Unsafe Code เพื่อป้องกันข้อผิดพลาด
+ความท้าทายที่นักพัฒนามักเจอคือการตัดสินใจว่าเมื่อไหร่ที่ `unsafe` จำเป็นจริงๆ การเขียน Safety Invariants ที่ครบถ้วน และการสร้าง Safe Abstraction ที่ครอบ Unsafe Code เพื่อป้องกันไม่ให้ผู้ใช้ API ต้องรับภาระด้านความปลอดภัยเอง นอกจากนี้ การทำ FFI (Foreign Function Interface) เพื่อเรียกใช้ C Library ก็เป็นอีกหัวข้อที่ต้องเข้าใจ Unsafe อย่างถ่องแท้
 
-## บทเรียนในส่วนนี้
+Part นี้จะครอบคลุมตั้งแต่ Raw Pointers และ Unsafe Block ไปจนถึงการเขียน FFI Binding ที่ปลอดภัยและใช้งานได้จริง
 
-- [Raw Pointers]() <!-- Draft - Coming Soon -->
-- [Unsafe Blocks และ Functions]() <!-- Draft - Coming Soon -->
-- [FFI และ Calling C Code]() <!-- Draft - Coming Soon -->
-
-## แนวทางการอ่าน
-
-- **สำหรับมือใหม่**: ควรอ่าน Part I–IV ให้เข้าใจก่อน เพราะ Unsafe Rust ต้องอาศัยความเข้าใจเรื่อง Ownership, Lifetime และ Type System เป็นพื้นฐาน
-- **สำหรับผู้มีประสบการณ์**: สามารถข้ามไปบทที่สนใจได้ โดยเฉพาะ FFI หากต้องการเชื่อมต่อกับ C Library
-- **เวลาที่ใช้**: ประมาณ 3–4 ชั่วโมง
-
-## ก่อนอ่านส่วนนี้
-
-ควรรู้พื้นฐาน:
-- Ownership, Borrowing และ Lifetime (Part I)
-- ระบบประเภทข้อมูลและ Trait (Part II)
-- การจัดการข้อผิดพลาดใน Rust (Part III)
-- ความเข้าใจพื้นฐานเกี่ยวกับ Pointers และ Memory Layout
-
-## หลังอ่านส่วนนี้ แนะนำให้อ่าน
-
-- [Part VI: Patterns และ Idioms](../part-06-patterns/index.md)
-- [A. Glossary - ศัพท์เทคนิค](../appendices/glossary.md)
+## เนื้อหาในส่วนนี้
+<!-- AUTO-INDEX-START -->
+<!-- AUTO-INDEX-END -->

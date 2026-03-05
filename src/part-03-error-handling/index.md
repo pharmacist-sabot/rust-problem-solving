@@ -1,35 +1,11 @@
-# Part III: การจัดการข้อผิดพลาด (Error Handling)
+# การจัดการข้อผิดพลาด (Error Handling)
 
-## เป้าหมายการเรียนรู้ (Learning Objectives)
+การจัดการข้อผิดพลาดเป็นหัวใจสำคัญของการเขียนโปรแกรมที่เชื่อถือได้ Rust ใช้แนวทาง Explicit Error Handling ผ่าน `Result<T, E>` และ `Option<T>` แทนการใช้ Exception เหมือนภาษาอื่น ซึ่งบังคับให้โปรแกรมเมอร์จัดการกับทุกกรณีที่อาจเกิดข้อผิดพลาดตั้งแต่ตอนเขียนโค้ด
 
-หลังจากอ่าน Part นี้จบ คุณจะสามารถ:
-- [ ] เข้าใจความแตกต่างระหว่าง `Result<T, E>` และ `Option<T>` และเลือกใช้ได้อย่างเหมาะสม
-- [ ] ใช้ `?` Operator เพื่อส่งต่อข้อผิดพลาดอย่างกระชับ
-- [ ] ออกแบบ Custom Error Types ที่รองรับการใช้งานจริง
-- [ ] เลือก Error Handling Pattern ที่เหมาะกับแต่ละสถานการณ์
+ความท้าทายที่นักพัฒนามักเจอคือการตัดสินใจว่าจะใช้ `Result` หรือ `Option` เมื่อไหร่ การออกแบบ Custom Error Types ที่รองรับการใช้งานจริงในหลายระดับ และการใช้ `?` Operator เพื่อส่งต่อข้อผิดพลาดอย่างกระชับโดยไม่สูญเสีย Context ของปัญหา
 
-## บทเรียนในส่วนนี้
+Part นี้จะครอบคลุมแนวคิดตั้งแต่พื้นฐานของ Result/Option ไปจนถึงเทคนิคขั้นสูงอย่าง Error Propagation Patterns และการสร้าง Error Types ที่ยืดหยุ่น
 
-> 📝 บทเรียนในส่วนนี้กำลังอยู่ระหว่างการจัดทำ
-
-- Result และ Option Types *(Coming Soon)*
-- Error Propagation Patterns *(Coming Soon)*
-- Custom Error Types *(Coming Soon)*
-
-## แนวทางการอ่าน
-
-- **สำหรับมือใหม่**: อ่านตามลำดับ เริ่มจาก Result และ Option Types ก่อน
-- **สำหรับผู้มีประสบการณ์**: สามารถข้ามไปบทที่สนใจได้ เช่น Custom Error Types
-- **เวลาที่ใช้**: ประมาณ 2-3 ชั่วโมง
-
-## ก่อนอ่านส่วนนี้
-
-ควรรู้พื้นฐาน:
-- Ownership, Borrowing และ Lifetime ([Part I](../part-01-ownership/index.md))
-- Pattern Matching (`match`, `if let`)
-- Generic Types และ Enum เบื้องต้น
-
-## หลังอ่านส่วนนี้ แนะนำให้อ่าน
-
-- [Part IV: Concurrency และ Parallelism](../part-04-concurrency/index.md) — การจัดการ Error ใน Multi-threaded Context
-- [Part VI: Patterns และ Idioms](../part-06-patterns/index.md) — Design Patterns ที่เกี่ยวข้อง
+## เนื้อหาในส่วนนี้นนี้
+<!-- AUTO-INDEX-START -->
+<!-- AUTO-INDEX-END -->
