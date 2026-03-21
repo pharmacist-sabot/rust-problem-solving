@@ -8,14 +8,14 @@
 
 ---
 
-## 📖 อ่านออนไลน์ (Read Online)
+## อ่านออนไลน์ (Read Online)
 
 คุณสามารถอ่านเนื้อหาทั้งหมดได้ฟรีที่เว็บไซต์
 👉 **[https://pharmacist-sabot.github.io/rust-problem-solving/](https://pharmacist-sabot.github.io/rust-problem-solving/)**
 
 ---
 
-## 💡 เกี่ยวกับโปรเจกต์ (About)
+## เกี่ยวกับโปรเจกต์ (About)
 
 Rust เป็นภาษาที่มี Learning Curve ค่อนข้างสูง โดยเฉพาะเรื่อง Memory Management, Ownership และ Borrow Checker ซึ่งมักจะเป็นกำแพงด่านแรกสำหรับผู้เริ่มต้น
 
@@ -32,7 +32,7 @@ Rust เป็นภาษาที่มี Learning Curve ค่อนข้�
 
 ---
 
-## 🛠️ การติดตั้งและรันบนเครื่อง (Local Development)
+## การติดตั้งและรันบนเครื่อง (Local Development)
 
 โปรเจกต์นี้สร้างด้วย [mdBook](https://github.com/rust-lang/mdBook) หากคุณต้องการรันเซิร์ฟเวอร์เพื่ออ่านบนเครื่องตัวเอง หรือต้องการแก้ไขเนื้อหา สามารถทำได้ตามขั้นตอนดังนี้
 
@@ -61,7 +61,7 @@ mdbook serve
 
 ---
 
-## 🤝 การร่วมพัฒนา (Contributing)
+## การร่วมพัฒนา (Contributing)
 
 เรายินดีต้อนรับทุกการแบ่งปัน ไม่ว่าจะเป็นการแก้คำผิด เพิ่มตัวอย่างโค้ด หรือเขียนบทความหัวข้อใหม่ที่คุณคิดว่าเป็นประโยชน์
 
@@ -75,7 +75,7 @@ mdbook serve
 
 ---
 
-## 📝 ลิขสิทธิ์ (License)
+## ลิขสิทธิ์ (License)
 
 เนื้อหาและสื่อการสอนในโปรเจกต์นี้ เผยแพร่ภายใต้สัญญาอนุญาต
 **Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**
