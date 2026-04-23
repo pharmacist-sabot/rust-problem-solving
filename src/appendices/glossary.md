@@ -186,4 +186,4 @@ Enum ที่แทน "สำเร็จ" (`Ok(T)`) หรือ "ผิด�
 
 ---
 
-> **หมายเหตุ:** Glossary นี้จะถูกอัปเดตเพิ่มเติมเมื่อมีบทเรียนใหม่ๆ ในหนังสือ หากพบคำศัพท์ที่ต้องการให้เพิ่ม สามารถ [แจ้งได้ที่ GitHub Issues](https://github.com/pharmacist-sabot/rust-problem-solving/issues)
+> **หมายเหตุ:** Glossary นี้จะถูกอัปเดตเพิ่มเติมเมื่อมีบทเรียนใหม่ๆ ในหนังสือ หากพบคำศัพท์ที่ต้องการให้เพิ่ม สามารถ [แจ้งได้ที่ GitHub Issues](https://github.com/suradet-ps/rust-problem-solving/issues)

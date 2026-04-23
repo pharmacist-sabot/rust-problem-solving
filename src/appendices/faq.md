@@ -59,7 +59,7 @@ fn to_other_ctx(&mut self) -> OtherCtx<'_> { ... }
 
 ### Q: พบข้อผิดพลาดในหนังสือ จะแจ้งได้ที่ไหน?
 
-**A:** สามารถเปิด Issue ได้ที่ [GitHub Repository](https://github.com/pharmacist-sabot/rust-problem-solving/issues) ของโปรเจกต์ครับ
+**A:** สามารถเปิด Issue ได้ที่ [GitHub Repository](https://github.com/suradet-ps/rust-problem-solving/issues) ของโปรเจกต์ครับ
 
 ### Q: อยากเขียนบทใหม่หรือแก้ไขเนื้อหา ทำได้ไหม?
 
@@ -67,4 +67,4 @@ fn to_other_ctx(&mut self) -> OtherCtx<'_> { ... }
 
 ---
 
-> **มีคำถามอื่นที่ไม่อยู่ในรายการนี้?** สามารถเปิด Issue ใน [GitHub Repository](https://github.com/pharmacist-sabot/rust-problem-solving/issues) ได้เลยครับ เราจะเพิ่มคำตอบเข้ามาในหน้านี้
+> **มีคำถามอื่นที่ไม่อยู่ในรายการนี้?** สามารถเปิด Issue ใน [GitHub Repository](https://github.com/suradet-ps/rust-problem-solving/issues) ได้เลยครับ เราจะเพิ่มคำตอบเข้ามาในหน้านี้

@@ -1,6 +1,6 @@
 # Rust Problem-Solving Handbook (TH) 🦀
 
-[![Deploy mdBook to GitHub Pages](https://github.com/pharmacist-sabot/rust-problem-solving/actions/workflows/deploy.yml/badge.svg)](https://github.com/pharmacist-sabot/rust-problem-solving/actions/workflows/deploy.yml)
+[![Deploy mdBook to GitHub Pages](https://github.com/suradet-ps/rust-problem-solving/actions/workflows/deploy.yml/badge.svg)](https://github.com/suradet-ps/rust-problem-solving/actions/workflows/deploy.yml)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![Book: mdBook](https://img.shields.io/badge/Book-mdBook-rust.svg)](https://rust-lang.github.io/mdBook/)
 
@@ -11,7 +11,7 @@
 ## อ่านออนไลน์ (Read Online)
 
 คุณสามารถอ่านเนื้อหาทั้งหมดได้ฟรีที่เว็บไซต์
-👉 **[https://pharmacist-sabot.github.io/rust-problem-solving/](https://pharmacist-sabot.github.io/rust-problem-solving/)**
+👉 **[https://suradet-ps.github.io/rust-problem-solving/](https://suradet-ps.github.io/rust-problem-solving/)**
 
 ---
 
@@ -49,7 +49,7 @@ cargo install mdbook
 
 ### 3. Clone Repository
 ```bash
-git clone https://github.com/pharmacist-sabot/rust-problem-solving.git
+git clone https://github.com/suradet-ps/rust-problem-solving.git
 cd rust-problem-solving
 ```
 

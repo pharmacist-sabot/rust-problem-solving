@@ -8,7 +8,7 @@
 
 | ชื่อ | บทบาท | GitHub |
 |------|--------|--------|
-| Suradet Pratomsak | ผู้เขียนหลัก / Documentation Architect | [@pharmacist-sabot](https://github.com/pharmacist-sabot) |
+| Suradet Pratomsak | ผู้เขียนหลัก / Documentation Architect | [@suradet-ps](https://github.com/suradet-ps) |
 
 ---
 
@@ -22,7 +22,7 @@
 - แปลเนื้อหาเป็นภาษาอื่น
 
 ### แจ้งปัญหา (Bug Reports)
-- หากพบข้อผิดพลาดในเนื้อหา สามารถเปิด [Issue](https://github.com/pharmacist-sabot/rust-problem-solving/issues) ได้เลยครับ
+- หากพบข้อผิดพลาดในเนื้อหา สามารถเปิด [Issue](https://github.com/suradet-ps/rust-problem-solving/issues) ได้เลยครับ
 - แจ้ง Typo, ลิงก์เสีย หรือโค้ดตัวอย่างที่ไม่ถูกต้อง
 
 ### เสนอหัวข้อใหม่ (Feature Requests)
@@ -31,7 +31,7 @@
 
 ### ขั้นตอนการ Contribute
 
-1. **Fork** Repository จาก [GitHub](https://github.com/pharmacist-sabot/rust-problem-solving)
+1. **Fork** Repository จาก [GitHub](https://github.com/suradet-ps/rust-problem-solving)
 2. สร้าง **Branch** ใหม่สำหรับการแก้ไข
 3. เขียนเนื้อหาหรือแก้ไขตามต้องการ
 4. ทดสอบด้วย `mdbook build` ให้แน่ใจว่า Build ผ่าน

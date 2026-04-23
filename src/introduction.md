@@ -20,4 +20,4 @@
 - **สำหรับมือใหม่:** แนะนำให้อ่านตามลำดับรายตอน โดยเฉพาะ Part I: Ownership & Borrowing
 - **สำหรับการแก้ปัญหาเฉพาะจุด:** สามารถค้นหา Error Message หรือชื่อหัวข้อที่ตรงกับปัญหาในสารบัญ แล้วเลือกข้ามไปอ่านในส่วน Troubleshooting ได้เลย
 
-ทุกคนสามารถร่วมกันพัฒนาเนื้อหาหนังสือเล่มนี้ได้ทางบอร์ด [GitHub Issues & Pull Requests](https://github.com/pharmacist-sabot/rust-problem-solving) ของโปรเจกต์นี้
+ทุกคนสามารถร่วมกันพัฒนาเนื้อหาหนังสือเล่มนี้ได้ทางบอร์ด [GitHub Issues & Pull Requests](https://github.com/suradet-ps/rust-problem-solving) ของโปรเจกต์นี้
